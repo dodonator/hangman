@@ -90,6 +90,7 @@ def word_sample(size:int, limit:int) -> List[str]:
         for line in tqdm(fo):
             if len(wordlist) < size:
                 word = line.strip()
+                word = convert(word)
                 score = word_score(word)
                 r = int(random.random() * limit)
                 if int(score) == r:
