@@ -1,9 +1,13 @@
 from pathlib import Path
-from backend import word_score
+from backend import word_score, convert
+from typing import List
 import random
 
 
-def word_sample(number=1000, limit=1000):
+SIZE = 1000
+LIMIT = 1000
+
+def word_sample(size:int=SIZE, limit:int=LIMIT) -> List[str]:
     path = Path("words.txt")
 
     wordlist = []
@@ -18,3 +22,14 @@ def word_sample(number=1000, limit=1000):
 
     wordlist.sort(key=lambda x: x[1], reverse=True)
     return wordlist
+
+
+def game():
+    score = 0
+    sample = word_sample()
+
+    for word in sample:
+        score += game_round(word)
+        answer = input("Do you want to continue [y,n]? ")
+        if answer.lower() == "n":
+            exit()
