@@ -26,7 +26,7 @@ def get_gamemode() -> str:
 
 
 def pvc_round(secret):
-    guess_limit = 50
+    guess_limit = 20
     print()
     print(bold(green("Player 1".center(80))))
     print(f"Try to guess the word: {len(secret)*'*'} ({len(secret)} letters).")
@@ -38,20 +38,20 @@ def pvc_round(secret):
     counter = 0
     while counter < guess_limit:
         counter += 1
-        guess = input(f"guess {counter}: ")
+        guess = input(f"guess {counter}/{guess_limit}: ")
         
         # commands
         if guess == "/true":
             print()
             print("The secret word contains:")
-            print(", ".join(list(sorted(right))))
+            print(green()", ".join(list(sorted(right)))))
             print()
             continue
 
         elif guess == "/false":
             print()
             print("The secret word does not contain:")
-            print(", ".join(list(sorted(wrong))))
+            print(red()", ".join(list(sorted(wrong)))))
             print()
             continue
 
