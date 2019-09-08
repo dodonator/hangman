@@ -1,4 +1,7 @@
 from string import ascii_lowercase
+from typing import List
+from pathlib import Path
+import random
 
 CHAR_FREQUENCY = {
     "a": 650,
@@ -84,7 +87,7 @@ def word_sample(size:int, limit:int) -> List[str]:
     wordlist = []
     with path.open("r") as fo_r:
         for line in fo_r:
-            if len(wordlist) < number:
+            if len(wordlist) < size:
                 word = line.strip()
                 score = word_score(word)
                 r = int(random.random() * limit)
