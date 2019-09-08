@@ -214,13 +214,17 @@ def PvP():
 
 def PvC():
     sample = word_sample(SIZE, LIMIT)
+    word_counter = 0
+    win_counter = 0
     total_score = 0
     for word, score in sample:
+        word_counter += 1
         del score
         print()
-        print(f"Your current score is: {total_score}.")
+        print(f"Your current score is: {total_score:.2f}%.")
         print()
-        total_score += pvc_round(word)
+        win_counter += bool(pvc_round(word))
+        total_score = (win_counter / word_counter) * 100
         if input("new round [y/n]?").lower() == "n":
             return
         
