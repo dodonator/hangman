@@ -1,3 +1,5 @@
+from string import ascii_lowercase
+
 CHAR_FREQUENCY = {
     "a": 650,
     "b": 190,

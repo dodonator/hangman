@@ -1,6 +1,5 @@
 import getpass
 from huepy import red, green, yellow, bold
-from string import ascii_lowercase
 from backend import convert, score
 
 
