@@ -27,7 +27,7 @@ def get_gamemode() -> str:
 
 def pvc_round(secret):
     print()
-    print(bold(green("Player 1".center(40))))
+    print(bold(green("Player 1".center(80))))
     print(f"Try to guess the word: {len(secret)*'*'} ({len(secret)} letters).")
     print(f"The secret word has a score of {word_score(secret)}")
     print("Tip: try out the '/best' and '/worst' command.")
@@ -100,7 +100,7 @@ def pvp_round(player1: str, player2:str):
     
     # choose mode
     print()
-    print(bold(green(player1.ljust(40))))
+    print(bold(green(player1)))
     print("-"*80)
     print("Choose between 'classic' and 'hangman' mode.".center(80))
     print("Classic mode:")
