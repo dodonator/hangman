@@ -2,8 +2,54 @@ import getpass
 from huepy import red, green, yellow, bold
 from string import ascii_lowercase
 
+CHAR_FREQUENCY = {
+    "a": 650,
+    "b": 190,
+    "c": 300,
+    "d": 510,
+    "e": 1740,
+    "f": 170,
+    "g": 300,
+    "h": 480,
+    "i": 760,
+    "j": 30,
+    "k": 120,
+    "l": 340,
+    "m": 250,
+    "n": 980,
+    "o": 250,
+    "p": 80,
+    "q": 2,
+    "r": 700, 
+    "s": 730,
+    "t": 620,
+    "u": 440,
+    "v": 70,
+    "w": 190,
+    "x": 3,
+    "y": 4,
+    "z": 110
+}
+
+def _repetition_score(word: str) -> float:
+    rep = sum([word.count(char) for char in word])
+    length = len(word)
+    return round(rep / length, 2)
+
+
+def _rarity_score(word: str) -> float:
+    rarity = sum(CHAR_FREQUENCY[char] for char in word)
+    length = len(word)
+    return round(rarity / length, 2)
+
+
 def word_score(word: str) -> float:
-    pass
+    word = word.convert()
+    # repeating chars:
+    repetition = _repetition_score(word)
+    # rarity of each char:
+    rarity = _rarity_score(word)
+    return round(repetition * rarity, 2)
 
 
 def score(word1: str, word2: str):  # type: float
@@ -34,7 +80,7 @@ def convert(strg):
     return result
 
 
-def round():
+def game_round():
     # player 1 phase
     print(bold(red("Player 1".center(80))))
     print("-"*80)
@@ -146,7 +192,7 @@ def round():
         
 def main():
     while True:
-        round()
+        game_round()
         print()
         new_round = input("Do you want a new round ([y]/n)?")
         if new_round.lower() == "n":
