@@ -2,6 +2,10 @@ import getpass
 from huepy import red, green, yellow, bold
 from string import ascii_lowercase
 
+def word_score(word: str) -> float:
+    pass
+
+
 def score(word1: str, word2: str):  # type: float
     len1 = len(word1)
     len2 = len(word2)
