@@ -216,9 +216,9 @@ def PvC():
         print()
         print(f"Your current score is: {score}.")
         print()
+        score += pvc_round(word)
         if input("new round [y/n]?").lower() == "n":
             return
-        score += pvc_round(word)
         
         
 def main():
