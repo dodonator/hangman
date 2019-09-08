@@ -42,7 +42,7 @@ def _rarity_score(word: str) -> float:
 
 
 def word_score(word: str) -> float:
-    word = word.convert()
+    word = convert(word)
     # repeating chars:
     repetition = _repetition_score(word)
     # rarity of each char:
