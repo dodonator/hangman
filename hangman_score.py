@@ -1,13 +1,13 @@
 import getpass
 from huepy import red, green, yellow, bold
-from backend import convert, score
+from backend import convert, score, word_score
 
 
 def game_round(player1: str, player2:str="JARVIS"):
     # player1 chooses the mode and guesses
     # player2 chooses the word
     if player2 == "JARVIS":
-        pass
+        pass        
     else:
         # player 2 phase
         print(bold(red(player2.center(80))))
@@ -123,7 +123,12 @@ def game_round(player1: str, player2:str="JARVIS"):
         
 def main():
     while True:
-        game_round()
+        player1 = input("Player 1: ")
+        player2 = input("Player 2: ")
+        if not player2:
+            game_round(player1)
+        else:
+            game_round(player1, player2)
         print()
         new_round = input("Do you want a new round ([y]/n)?")
         if new_round.lower() == "n":
