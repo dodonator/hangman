@@ -1,6 +1,7 @@
 from string import ascii_lowercase
 from typing import List
 from pathlib import Path
+from tqdm import tqdm
 import random
 
 CHAR_FREQUENCY = {
@@ -85,8 +86,8 @@ def word_sample(size:int, limit:int) -> List[str]:
     path = Path("words.txt")
 
     wordlist = []
-    with path.open("r") as fo_r:
-        for line in fo_r:
+    with path.open("r") as fo:
+        for line in tqdm(fo):
             if len(wordlist) < size:
                 word = line.strip()
                 score = word_score(word)
