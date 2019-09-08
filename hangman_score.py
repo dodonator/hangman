@@ -1,19 +1,102 @@
 import getpass
 from huepy import red, green, yellow, bold
-from backend import convert, score, word_score
+from backend import convert, score, word_score, word_sample
+from typing import Dict
 
 
-def game_round(player1: str, player2:str="JARVIS"):
-    # player1 chooses the mode and guesses
-    # player2 chooses the word
-    if player2 == "JARVIS":
-        pass        
+SIZE = 1000
+LIMIT = 1000
+
+
+def get_gamemode() -> str:
+    print()
+    print("-"*80)
+    print("Choose between 'PvC' and 'PvP' mode.".center(80))
+    print("PvC mode:")
+    print("\tYou play against the computer in 'classic' mode.")
+    print()
+    print("PvP mode: ")
+    print("\tYou play against other local players in two different modes.")
+    print()
+    gamemode = convert(input(": "))
+    if gamemode == "pvp":
+        return "pvp"
     else:
-        # player 2 phase
-        print(bold(red(player2.center(80))))
-        print("-"*80)
-        print("Input your secret word.")
-        secret = convert(getpass.getpass(": "))
+        return "pvc"
+
+
+def pvc_round(secret):
+    print()
+    print(bold(green("Player 1".center(40))))
+    print(f"Try to guess the word: {len(secret)*'*'} ({len(secret)} letters).")
+    print(f"The secret word has a score of {word_score(secret)}")
+    print("Tip: try out the '/best' and '/worst' command.")
+    print()
+
+    last_guesses = {}
+
+    counter = 1
+    while True:
+        guess = input(f"guess {counter}: ")
+        
+        # commands
+        if guess == "/best" or guess == "/worst":
+            rev = True if guess == "/best" else False
+            print()
+            if rev:
+                print("your best guesses: ")
+            else:
+                print("your worst guesses: ")
+            num = 1
+            for g, s in sorted(last_guesses.items(), key=lambda t: t[1], reverse=rev):
+                if num <= 10:
+                    print(f"{num}. {g:<10} score: {s:.2f}%")
+                    num += 1
+                else:
+                    break
+            print()
+            continue
+            
+        elif guess == "/solve":
+            print(str(green("The word was: ") + secret).center(80))
+            print()
+            return 0
+        
+        guess = convert(guess)
+        
+        if guess == secret:
+            print()
+            print(green("Congratulations, you guessed it.".center(80)))
+            print(str(green("The word was: ") + secret).center(80))
+            print()
+            return word_score(secret)
+            
+        if len(guess) == 1:
+            print()
+            print(red("Single chars aren't allowed").center(80))
+            print()
+            continue
+            
+        sc = score(secret, guess)
+        last_guesses[guess] = sc
+        if sc < 25.00:
+            print(red(f"score: {sc:.2f}%"))
+        elif sc > 75.00:
+            print(green(f"score: {sc:.2f}%"))
+        else:
+            print(yellow(f"score: {sc:.2f}%"))
+        print()
+        
+        counter += 1
+
+
+def pvp_round(player1: str, player2:str):
+    
+    # player 2 phase
+    print(bold(red(player2.center(80))))
+    print("-"*80)
+    print("Input your secret word.")
+    secret = convert(getpass.getpass(": "))
     
     # choose mode
     print()
@@ -31,10 +114,6 @@ def game_round(player1: str, player2:str="JARVIS"):
     if mode == "hangman":
         SINGLE_CHARS_ALLOWED = True
         LIMIT = 50
-        
-    elif mode == "classic":
-        SINGLE_CHARS_ALLOWED = False
-        LIMIT = None
         
     else:
         mode = "classic"
@@ -120,19 +199,37 @@ def game_round(player1: str, player2:str="JARVIS"):
         else:
             counter += 1
 
+
+def PvP():
+    player1 = input("Player 1: ").capitalize()
+    player2 = input("Player 2: ").capitalize()
+    while True:
+        pvp_round(player1, player2)
+        if input("new round [y/n]?").lower() == "n":
+            break
+        player1, player2 = player2, player1
+
+def PvC():
+    sample = word_sample(SIZE, LIMIT)
+    score = 0
+    for word, score in sample:
+        print()
+        print(f"Your current score is: {score}.")
+        print()
+        if input("new round [y/n]?").lower() == "n":
+            return
+        score += pvc_round(word)
+        
         
 def main():
-    while True:
-        player1 = input("Player 1: ")
-        player2 = input("Player 2: ")
-        if not player2:
-            game_round(player1)
-        else:
-            game_round(player1, player2)
-        print()
-        new_round = input("Do you want a new round ([y]/n)?")
-        if new_round.lower() == "n":
-            break
+    game_mode = get_gamemode()
+    if game_mode == "pvc":
+        PvC()
+    elif game_mode == "pvp":
+        PvP()
+    else:
+        raise Exception("Wrong input!")
+
 
 if __name__ == "__main__":
     main()
