@@ -14,6 +14,7 @@ def word_sample(number=1000, limit=1000):
                 score = word_score(word)
                 r = int(random.random() * limit)
                 if int(score) == r:
-                    wordlist.append(word)
+                    wordlist.append((word, score))
 
+    wordlist.sort(key=lambda x: x[1], reverse=True)
     return wordlist
