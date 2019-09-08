@@ -5,7 +5,7 @@ from typing import Dict
 
 
 SIZE = 1000
-LIMIT = 1000
+LIMIT = 750
 
 
 def get_gamemode() -> str:
@@ -37,7 +37,6 @@ def pvc_round(secret):
     wrong = set()
     counter = 0
     while counter < guess_limit:
-        counter += 1
         guess = input(f"guess {counter}/{guess_limit}: ")
         
         # commands
@@ -90,6 +89,8 @@ def pvc_round(secret):
         print()
         print(result)
         print()     
+        counter += 1
+    print(str(red("The word was: ") + secret).center(80))
         
 
 
