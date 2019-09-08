@@ -31,7 +31,6 @@ def pvc_round(secret):
     print(bold(green("Player 1".center(80))))
     print(f"Try to guess the word: {len(secret)*'*'} ({len(secret)} letters).")
     print(f"The secret word has a score of {word_score(secret)}")
-    print("Tip: try out the '/false' command.")
     print()
 
     right = set()
@@ -42,10 +41,17 @@ def pvc_round(secret):
         guess = input(f"guess {counter}: ")
         
         # commands
-        if guess == "/false":
+        if guess == "/true":
+            print()
+            print("The secret word contains:")
+            print(", ".join(list(sorted(right))))
+            print()
+            continue
+
+        elif guess == "/false":
             print()
             print("The secret word does not contain:")
-            print(list(sorted(wrong)))
+            print(", ".join(list(sorted(wrong))))
             print()
             continue
 
@@ -208,12 +214,13 @@ def PvP():
 
 def PvC():
     sample = word_sample(SIZE, LIMIT)
-    score = 0
+    total_score = 0
     for word, score in sample:
+        del score
         print()
-        print(f"Your current score is: {score}.")
+        print(f"Your current score is: {total_score}.")
         print()
-        score += pvc_round(word)
+        total_score += pvc_round(word)
         if input("new round [y/n]?").lower() == "n":
             return
         
