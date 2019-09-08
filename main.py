@@ -26,37 +26,28 @@ def get_gamemode() -> str:
 
 
 def pvc_round(secret):
+    guess_limit = 50
     print()
     print(bold(green("Player 1".center(80))))
     print(f"Try to guess the word: {len(secret)*'*'} ({len(secret)} letters).")
     print(f"The secret word has a score of {word_score(secret)}")
-    print("Tip: try out the '/best' and '/worst' command.")
+    print("Tip: try out the '/false' command.")
     print()
 
-    last_guesses = {}
-
+    right = set()
+    wrong = set()
     counter = 1
-    while True:
+    while counter < guess_limit:
         guess = input(f"guess {counter}: ")
         
         # commands
-        if guess == "/best" or guess == "/worst":
-            rev = True if guess == "/best" else False
+        if guess == "/false":
             print()
-            if rev:
-                print("your best guesses: ")
-            else:
-                print("your worst guesses: ")
-            num = 1
-            for g, s in sorted(last_guesses.items(), key=lambda t: t[1], reverse=rev):
-                if num <= 10:
-                    print(f"{num}. {g:<10} score: {s:.2f}%")
-                    num += 1
-                else:
-                    break
+            print("The secret word does not contain:")
+            print(list(sorted(wrong)))
             print()
             continue
-            
+
         elif guess == "/solve":
             print(str(green("The word was: ") + secret).center(80))
             print()
@@ -72,21 +63,17 @@ def pvc_round(secret):
             return word_score(secret)
             
         if len(guess) == 1:
-            print()
-            print(red("Single chars aren't allowed").center(80))
-            print()
-            continue
-            
-        sc = score(secret, guess)
-        last_guesses[guess] = sc
-        if sc < 25.00:
-            print(red(f"score: {sc:.2f}%"))
-        elif sc > 75.00:
-            print(green(f"score: {sc:.2f}%"))
+            if guess in secret:
+                right.add(guess)
+            else:
+                wrong.add(guess)
         else:
-            print(yellow(f"score: {sc:.2f}%"))
+            print(red("Sorry, but that was wrong.".center(80)))
+
+        result = "".join([char if char in right else "*" for char in secret])
         print()
-        
+        print(result)
+        print()     
         counter += 1
 
 
