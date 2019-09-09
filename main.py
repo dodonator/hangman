@@ -7,6 +7,7 @@ from typing import Dict
 SIZE = 1000
 LIMIT = 1000
 
+WORDS_TO_DELETE = []
 
 def get_gamemode() -> str:
     print()
@@ -225,6 +226,8 @@ def PvC():
         print()
         win_counter += bool(pvc_round(word))
         total_score = (win_counter / word_counter) * 100
+        if input("Was the word valid [y/n]?").lower() == "n":
+            WORDS_TO_DELETE.append(word + "\n")
         if input("new round [y/n]?").lower() == "n":
             return
         
