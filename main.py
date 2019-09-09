@@ -39,7 +39,7 @@ def pvc_round(secret):
     wrong = set()
     counter = 0
     while counter < guess_limit:
-        guess = input(f"guess {counter}: ")
+        guess = input(f"guess {counter}/{guess_limit}: ")
 
         # commands
         if guess == "/true":
