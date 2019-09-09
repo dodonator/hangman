@@ -1,6 +1,6 @@
 import getpass
 from huepy import red, green, yellow, bold
-from backend import convert, score, word_score, word_sample
+from backend import convert, score, word_score, word_sample, delete_words
 from typing import Dict
 
 
@@ -240,6 +240,9 @@ def main():
         PvP()
     else:
         raise Exception("Wrong input!")
+    
+    if WORDS_TO_DELETE:
+        delete_words(WORDS_TO_DELETE)
 
 
 if __name__ == "__main__":
