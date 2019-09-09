@@ -45,14 +45,14 @@ def pvc_round(secret):
         if guess == "/true":
             print()
             print("The secret word contains:")
-            print(", ".join(list(sorted(right))))
+            print(green(", ".join(list(sorted(right)))))
             print()
             continue
 
         elif guess == "/false":
             print()
             print("The secret word does not contain:")
-            print(", ".join(list(sorted(wrong))))
+            print(red(", ".join(list(sorted(wrong)))))
             print()
             continue
 
