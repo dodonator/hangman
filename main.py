@@ -38,7 +38,6 @@ def pvc_round(secret):
     wrong = set()
     counter = 0
     while counter < guess_limit:
-        counter += 1
         guess = input(f"guess {counter}: ")
         
         # commands
@@ -90,7 +89,8 @@ def pvc_round(secret):
         result = "".join([char if char in right else "*" for char in secret.upper()])
         print()
         print(result)
-        print()     
+        print()
+        counter += 1  
         
 
 
