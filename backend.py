@@ -4,6 +4,14 @@ from pathlib import Path
 from tqdm import tqdm
 import random
 
+__all__ = [
+    "word_sample",
+    "word_score",
+    "compare_score",
+    "delete_words",
+    "convert"
+    ]
+
 CHAR_FREQUENCY = {
     "a": 650,
     "b": 190,
@@ -22,7 +30,7 @@ CHAR_FREQUENCY = {
     "o": 250,
     "p": 80,
     "q": 2,
-    "r": 700, 
+    "r": 700,
     "s": 730,
     "t": 620,
     "u": 440,
@@ -32,6 +40,7 @@ CHAR_FREQUENCY = {
     "y": 4,
     "z": 110
 }
+
 
 def _repetition_score(word: str) -> float:
     rep = sum([word.count(char) for char in word])
@@ -54,7 +63,7 @@ def word_score(word: str) -> float:
     return round(repetition * rarity, 2)
 
 
-def compare_score(word1: str, word2: str):  # type: float
+def compare_score(word1: str, word2: str) -> float:
     len1 = len(word1)
     len2 = len(word2)
     max_len = max(len1, len2)  # common length of words
@@ -82,10 +91,10 @@ def convert(strg):
     return result
 
 
-def word_sample(size:int, limit:int) -> List[str]:
+def word_sample(size: int, limit: int) -> List:
     path = Path("words.txt")
 
-    wordlist = []
+    wordlist: List = []
     with path.open("r") as fo:
         for line in tqdm(fo):
             if len(wordlist) < size:

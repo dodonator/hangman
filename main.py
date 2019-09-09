@@ -1,6 +1,6 @@
 import getpass
 from huepy import red, green, yellow, bold
-from backend import convert, compare_score, word_score, word_sample, delete_words
+from backend import *
 from typing import Dict
 
 
@@ -239,7 +239,7 @@ def PvC():
         if input("new round [y/n]?").lower() == "n":
             return
 
-    
+
 def main():
     game_mode = get_gamemode()
     if game_mode == "pvc":
