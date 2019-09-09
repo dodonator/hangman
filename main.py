@@ -1,12 +1,13 @@
 import getpass
 from huepy import red, green, yellow, bold
-from backend import convert, score, word_score, word_sample
+from backend import convert, score, word_score, word_sample, delete_words
 from typing import Dict
 
 
 SIZE = 1000
 LIMIT = 750
 
+WORDS_TO_DELETE = []
 
 def get_gamemode() -> str:
     print()
@@ -226,6 +227,8 @@ def PvC():
         print()
         win_counter += bool(pvc_round(word))
         total_score = (win_counter / word_counter) * 100
+        if input("Was the word valid [y/n]?").lower() == "n":
+            WORDS_TO_DELETE.append(word + "\n")
         if input("new round [y/n]?").lower() == "n":
             return
         
@@ -238,6 +241,9 @@ def main():
         PvP()
     else:
         raise Exception("Wrong input!")
+    
+    if WORDS_TO_DELETE:
+        delete_words(WORDS_TO_DELETE)
 
 
 if __name__ == "__main__":
