@@ -15,7 +15,7 @@ def get_gamemode() -> str:
     print("-"*80)
     print("Choose between 'PvC' and 'PvP' mode.".center(80))
     print("PvC mode:")
-    print("\tYou play against the computer in 'classic' mode.")
+    print("\tYou play against the computer in 'hangman' mode.")
     print()
     print("PvP mode: ")
     print("\tYou play against other local players in two different modes.")
@@ -250,6 +250,7 @@ def main():
         raise Exception("Wrong input!")
 
     if WORDS_TO_DELETE:
+        print("invalid words will now be deleted")
         delete_words(WORDS_TO_DELETE)
 
 
