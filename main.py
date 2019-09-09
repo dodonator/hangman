@@ -38,7 +38,7 @@ def pvc_round(secret):
     wrong = set()
     counter = 0
     while counter < guess_limit:
-        guess = input(f"guess {counter}/{guess_limit}: ")
+        guess = input(f"guess {counter}: ")
         
         # commands
         if guess == "/true":
@@ -93,7 +93,6 @@ def pvc_round(secret):
         counter += 1
     print(str(red("The word was: ") + secret).center(80))
         
-
 
 def pvp_round(player1: str, player2:str):
     
