@@ -119,12 +119,20 @@ def delete_words(wordlist: List) -> None:
     counter = 0
     with path.open("r") as fo_r:
         with path_tmp.open("w") as fo_w:
-            for line in fo_r:
-                if line.lower() != wordlist[0]:
-                    fo_w.write(line)
-                else:
+            step = 0
+            while wordlist:
+                current = wordlist[0]
+                line = fo_r.readline().lower()
+                if line == current:
                     word = wordlist.pop(0)
                     print(f"{counter:<5} deleting: {word.strip()}")
                     counter += 1
+                else:
+                    fo_w.write(line)
+                step = (ord(current[0]) - ord(line[0].lower())) * 10
+                # skip some lines
+                for i in range(step):
+                    fo_r.readline()
+
     print(f"deleted {counter} lines")
     path_tmp.replace(path)
