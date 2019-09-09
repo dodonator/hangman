@@ -98,3 +98,16 @@ def word_sample(size:int, limit:int) -> List[str]:
 
     wordlist.sort(key=lambda x: x[1], reverse=True)
     return wordlist
+
+
+def delete_words(wordlist: List) -> None:
+    path = Path("wordlist.txt")
+    path_tmp = Path("tmp.txt")
+    path_tmp.touch()
+
+    with path.open("r") as fo_r:
+        with path_tmp.open("w") as fo_w:
+            for line in fo_r:
+                if line.lower() not in wordlist:
+                    fo_w.write(line)
+    path_tmp.replace(path)
