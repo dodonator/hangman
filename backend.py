@@ -54,7 +54,7 @@ def word_score(word: str) -> float:
     return round(repetition * rarity, 2)
 
 
-def score(word1: str, word2: str):  # type: float
+def compare_score(word1: str, word2: str):  # type: float
     len1 = len(word1)
     len2 = len(word2)
     max_len = max(len1, len2)  # common length of words

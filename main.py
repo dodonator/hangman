@@ -1,6 +1,6 @@
 import getpass
 from huepy import red, green, yellow, bold
-from backend import convert, score, word_score, word_sample, delete_words
+from backend import convert, compare_score, word_score, word_sample, delete_words
 from typing import Dict
 
 
@@ -8,6 +8,7 @@ SIZE = 1000
 LIMIT = 750
 
 WORDS_TO_DELETE = []
+
 
 def get_gamemode() -> str:
     print()
@@ -39,7 +40,7 @@ def pvc_round(secret):
     counter = 0
     while counter < guess_limit:
         guess = input(f"guess {counter}: ")
-        
+
         # commands
         if guess == "/true":
             print()
@@ -59,16 +60,16 @@ def pvc_round(secret):
             print(str(green("The word was: ") + secret).center(80))
             print()
             return 0
-        
+
         guess = convert(guess)
-        
+
         if guess == secret:
             print()
             print(green("Congratulations, you guessed it.".center(80)))
             print(str(green("The word was: ") + secret).center(80))
             print()
             return word_score(secret)
-            
+
         if len(guess) == 1:
             guess = guess.upper()
             if guess in secret.upper():
@@ -86,22 +87,24 @@ def pvc_round(secret):
             print()
             return word_score(secret)
 
-        result = "".join([char if char in right else "*" for char in secret.upper()])
+        result = "".join(
+            [char if char in right else "*" for char in secret.upper()]
+        )
         print()
         print(result)
-        print()     
+        print()
         counter += 1
     print(str(red("The word was: ") + secret).center(80))
-        
 
-def pvp_round(player1: str, player2:str):
-    
+
+def pvp_round(player1: str, player2: str):
+
     # player 2 phase
     print(bold(red(player2.center(80))))
     print("-"*80)
     print("Input your secret word.")
     secret = convert(getpass.getpass(": "))
-    
+
     # choose mode
     print()
     print(bold(green(player1)))
@@ -114,22 +117,21 @@ def pvp_round(player1: str, player2:str):
     print("\tSingle characters are allowed but there is a limit of 50 trys.")
     print()
     mode = convert(input(": "))
-    
+
     if mode == "hangman":
         SINGLE_CHARS_ALLOWED = True
         LIMIT = 50
-        
+
     else:
         mode = "classic"
         SINGLE_CHARS_ALLOWED = False
-        LIMIT = None
-        
+        LIMIT = 0
+
     print(f"You choosed '{mode}' mode.")
     print()
 
     # player 1 guess phase
 
-    print()
     print()
     print(bold(green(player1.ljust(40) + mode.rjust(40))))
     print(f"Try to guess the word: {len(secret)*'*'} ({len(secret)} letters).")
@@ -137,13 +139,17 @@ def pvp_round(player1: str, player2:str):
     print("Tip: try out the '/best' and '/worst' command.")
     print()
 
-    last_guesses = {}
+    last_guesses: Dict = dict()
 
     counter = 1
     while True:
-        prompt = f"guess {counter}/{LIMIT}: " if LIMIT else f"guess {counter}: "
+        if LIMIT:
+            prompt = f"guess {counter}/{LIMIT}: "
+        else:
+            prompt = f"guess {counter}: "
+
         guess = input(prompt)
-        
+
         # commands
         if guess == "/best" or guess == "/worst":
             rev = True if guess == "/best" else False
@@ -153,7 +159,8 @@ def pvp_round(player1: str, player2:str):
             else:
                 print("your worst guesses: ")
             num = 1
-            for g, s in sorted(last_guesses.items(), key=lambda t: t[1], reverse=rev):
+            tmp = sorted(last_guesses.items(), key=lambda t: t[1], reverse=rev)
+            for g, s in tmp:
                 if num <= 10:
                     print(f"{num}. {g:<10} score: {s:.2f}%")
                     num += 1
@@ -161,32 +168,32 @@ def pvp_round(player1: str, player2:str):
                     break
             print()
             continue
-            
+
         elif guess == "/solve":
             print(str(green("The word was: ") + secret).center(80))
             print()
             return 0
-            
+
         elif guess == "/reset_counter":
             counter = 1
             continue
-        
+
         guess = convert(guess)
-        
+
         if guess == secret:
             print()
             print(green("Congratulations, you guessed it.".center(80)))
             print(str(green("The word was: ") + secret).center(80))
             print()
             return word_score(secret)
-            
+
         if not SINGLE_CHARS_ALLOWED and len(guess) == 1:
             print()
             print(red("Single chars aren't allowed").center(80))
             print()
             continue
-            
-        sc = score(secret, guess)
+
+        sc = compare_score(secret, guess)
         last_guesses[guess] = sc
         if sc < 25.00:
             print(red(f"score: {sc:.2f}%"))
@@ -195,7 +202,7 @@ def pvp_round(player1: str, player2:str):
         else:
             print(yellow(f"score: {sc:.2f}%"))
         print()
-        
+
         if LIMIT and counter == LIMIT:
             print("This was your last turn.")
             print(str(green("The word was: ") + secret).center(80))
@@ -212,6 +219,7 @@ def PvP():
         if input("new round [y/n]?").lower() == "n":
             break
         player1, player2 = player2, player1
+
 
 def PvC():
     sample = word_sample(SIZE, LIMIT)
@@ -230,8 +238,8 @@ def PvC():
             WORDS_TO_DELETE.append(word + "\n")
         if input("new round [y/n]?").lower() == "n":
             return
-        
-        
+
+    
 def main():
     game_mode = get_gamemode()
     if game_mode == "pvc":
@@ -240,7 +248,7 @@ def main():
         PvP()
     else:
         raise Exception("Wrong input!")
-    
+
     if WORDS_TO_DELETE:
         delete_words(WORDS_TO_DELETE)
 
